@@ -2,5 +2,6 @@
   <Project Path="EventWise.API/EventWise.API.csproj" />
   <Project Path="EventWise.Application/EventWise.Application.csproj" />
   <Project Path="EventWise.Blazor/EventWise.Blazor.csproj" />
+  <Project Path="EventWise.Domain/EventWise.Domain.csproj" Id="9bbee4f1-df5a-4515-9a69-4238e173423d" />
   <Project Path="EventWise.Infrastructure/EventWise.Infrastructure.csproj" />
 </Solution>
