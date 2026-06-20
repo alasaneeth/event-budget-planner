@@ -10,4 +10,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EventWise.Infrastructure\EventWise.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
