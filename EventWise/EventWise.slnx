@@ -1,5 +1,4 @@
 <Solution>
-  <Project Path="Domain/EventWise.Domain.csproj" />
   <Project Path="EventWise.API/EventWise.API.csproj" />
   <Project Path="EventWise.Application/EventWise.Application.csproj" />
   <Project Path="EventWise.Blazor/EventWise.Blazor.csproj" />
