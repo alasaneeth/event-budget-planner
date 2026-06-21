@@ -1,0 +1,6 @@
+@EventWise.API_HostAddress = http://localhost:5029
+
+GET {{EventWise.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
