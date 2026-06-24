@@ -1,4 +1,5 @@
 using EventWise.Blazor.Components;
+using EventWise.Blazor.Features.Auth.Services;
 using MudBlazor.Services;
 
 
@@ -11,6 +12,12 @@ builder.Services.AddRazorComponents()
 builder.Services.AddMudBlazorJsApi();
 builder.Services.AddMudBlazorDialog();
 builder.Services.AddMudBlazorJsEvent();
+
+// HTTP Client
+builder.Services.AddHttpClient<AuthApiService>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7094/");
+});
 
 
 var app = builder.Build();
