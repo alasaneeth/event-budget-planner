@@ -1,0 +1,129 @@
+﻿@page "/register"
+@using EventWise.Application.DTOs.Auth
+@using EventWise.Blazor.Features.Auth.Services
+@using MudBlazor
+@inject AuthApiService AuthApiService
+@inject NavigationManager Navigation
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="mt-16">
+    <MudPaper Elevation="3" Class="pa-8">
+
+        <MudText Typo="Typo.h4" Align="Align.Center"
+                 Class="mb-6" Color="Color.Primary">
+            Create Account
+        </MudText>
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <MudAlert Severity="Severity.Error"
+                      Class="mb-4">@errorMessage</MudAlert>
+        }
+
+        @if (!string.IsNullOrEmpty(successMessage))
+        {
+            <MudAlert Severity="Severity.Success"
+                      Class="mb-4">@successMessage</MudAlert>
+        }
+
+        <MudTextField @bind-Value="@registerDto.FullName"
+                      Label="Full Name"
+                      Variant="Variant.Outlined"
+                      Class="mb-4"
+                      FullWidth="true" />
+
+        <MudTextField @bind-Value="@registerDto.Email"
+                      Label="Email"
+                      Variant="Variant.Outlined"
+                      InputType="InputType.Email"
+                      Class="mb-4"
+                      FullWidth="true" />
+
+        <MudSelect @bind-Value="@registerDto.Role"
+                   Label="Role"
+                   Variant="Variant.Outlined"
+                   Class="mb-4"
+                   FullWidth="true">
+            <MudSelectItem Value="@("EventOrganizer")">
+                Event Organizer
+            </MudSelectItem>
+            <MudSelectItem Value="@("FinanceManager")">
+                Finance Manager
+            </MudSelectItem>
+        </MudSelect>
+
+        <MudTextField @bind-Value="@registerDto.Password"
+                      Label="Password"
+                      Variant="Variant.Outlined"
+                      InputType="InputType.Password"
+                      Class="mb-4"
+                      FullWidth="true" />
+
+        <MudTextField @bind-Value="@registerDto.ConfirmPassword"
+                      Label="Confirm Password"
+                      Variant="Variant.Outlined"
+                      InputType="InputType.Password"
+                      Class="mb-6"
+                      FullWidth="true" />
+
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   FullWidth="true"
+                   Size="Size.Large"
+                   OnClick="HandleRegister"
+                   Disabled="isLoading">
+            @if (isLoading)
+            {
+                <MudProgressCircular Size="Size.Small"
+                                     Indeterminate="true" />
+            }
+            else
+            {
+                <span>Register</span>
+            }
+        </MudButton>
+
+        <MudText Align="Align.Center" Class="mt-4">
+            Already have an account?
+            <MudLink Href="/login">Login</MudLink>
+        </MudText>
+
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private RegisterDto registerDto = new();
+    private string errorMessage = string.Empty;
+    private string successMessage = string.Empty;
+    private bool isLoading = false;
+
+    private async Task HandleRegister()
+    {
+        isLoading = true;
+        errorMessage = string.Empty;
+        successMessage = string.Empty;
+
+        try
+        {
+            var result = await AuthApiService.RegisterAsync(registerDto);
+
+            if (result != null)
+            {
+                successMessage = "Registration successful!";
+                await Task.Delay(1500);
+                Navigation.NavigateTo("/login");
+            }
+            else
+            {
+                errorMessage = "Registration failed. Please try again.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}
