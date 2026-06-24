@@ -1,10 +1,17 @@
 using EventWise.Blazor.Components;
+using MudBlazor.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddMudBlazorJsApi();
+builder.Services.AddMudBlazorDialog();
+builder.Services.AddMudBlazorJsEvent();
+
 
 var app = builder.Build();
 
