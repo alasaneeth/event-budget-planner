@@ -1,0 +1,90 @@
+﻿@page "/login"
+@using EventWise.Application.DTOs.Auth
+@using EventWise.Blazor.Features.Auth.Services
+@inject AuthApiService AuthApiService
+@inject NavigationManager Navigation
+@using MudBlazor
+@using EventWise.Blazor.Features.Auth.Services
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="mt-16">
+    <MudPaper Elevation="3" Class="pa-8">
+
+        <MudText Typo="Typo.h4" Align="Align.Center" 
+                 Class="mb-6" Color="Color.Primary">
+            EventWise Login
+        </MudText>
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <MudAlert Severity="Severity.Error" 
+                      Class="mb-4">@errorMessage</MudAlert>
+        }
+
+        <MudTextField @bind-Value="@loginDto.Email"
+                      Label="Email"
+                      Variant="Variant.Outlined"
+                      InputType="InputType.Email"
+                      Class="mb-4"
+                      FullWidth="true" />
+
+        <MudTextField @bind-Value="@loginDto.Password"
+                      Label="Password"
+                      Variant="Variant.Outlined"
+                      InputType="InputType.Password"
+                      Class="mb-6"
+                      FullWidth="true" />
+
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   FullWidth="true"
+                   Size="Size.Large"
+                   OnClick="HandleLogin"
+                   Disabled="isLoading">
+            @if (isLoading)
+            {
+                <MudProgressCircular Size="Size.Small" 
+                                     Indeterminate="true" />
+            }
+            else
+            {
+                <span>Login</span>
+            }
+        </MudButton>
+
+        <MudText Align="Align.Center" Class="mt-4">
+            Don't have an account?
+            <MudLink Href="/register">Register</MudLink>
+        </MudText>
+
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private LoginDto loginDto = new();
+    private string errorMessage = string.Empty;
+    private bool isLoading = false;
+
+    private async Task HandleLogin()
+    {
+        isLoading = true;
+        errorMessage = string.Empty;
+
+        try
+        {
+            var result = await AuthApiService.LoginAsync(loginDto);
+
+            if (result != null)
+                Navigation.NavigateTo("/dashboard");
+            else
+                errorMessage = "Invalid email or password";
+        }
+        catch (Exception ex)
+        {
+            errorMessage = ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}
